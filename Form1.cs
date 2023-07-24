@@ -13,7 +13,7 @@ namespace VitroxProject
         {
             short lotsNotFound = 0;
             string server2 = "\\\\mex6vtrx02\\D\\Texas\\Report\\ICPLUS", server1 = "\\\\mex6vtrx01\\d\\Texas\\Report\\ICPLUS";
-            string mainPath = "W:\\\\MC Back End\\Generic\\Molding and Singulation\\Emilia M\\VTRX REPORTS";
+            string mainPath = "\\\\mexhome03\\Data\\MC Back End\\Generic\\Molding and Singulation\\Emilia M\\VTRX REPORTS";
             bool flag = false;
             List<string> lotsList = new List<string>();
             List<string> lotsFound = new List<string>();
@@ -93,6 +93,13 @@ namespace VitroxProject
                     message = message + lot + "  ";
                 }
                 MessageBox.Show(message, "Lots Results");
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = mainPath, 
+                    UseShellExecute = true,
+                    Verb = "open"
+                });
             }
             else
             {
