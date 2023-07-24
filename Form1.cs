@@ -96,7 +96,7 @@ namespace VitroxProject
 
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = mainPath, 
+                    FileName = mainPath,
                     UseShellExecute = true,
                     Verb = "open"
                 });
@@ -118,6 +118,7 @@ namespace VitroxProject
             {
                 textBox1.Text = textBox1.Text.Replace(".1\r\n", ";");
             }
+            textBox1.Text = textBox1.Text.Replace(".1", ";");
 
         }
     }

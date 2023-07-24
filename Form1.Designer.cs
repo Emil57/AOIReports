@@ -40,7 +40,7 @@
             // button1
             // 
             button1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            button1.Location = new Point(410, 385);
+            button1.Location = new Point(410, 396);
             button1.Name = "button1";
             button1.Size = new Size(67, 29);
             button1.TabIndex = 0;
@@ -51,7 +51,7 @@
             // button2
             // 
             button2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            button2.Location = new Point(306, 385);
+            button2.Location = new Point(306, 396);
             button2.Name = "button2";
             button2.Size = new Size(83, 29);
             button2.TabIndex = 1;
@@ -75,13 +75,13 @@
             label2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label2.Location = new Point(12, 111);
             label2.Name = "label2";
-            label2.Size = new Size(267, 80);
+            label2.Size = new Size(267, 100);
             label2.TabIndex = 3;
-            label2.Text = "Enter lot(s) following the below rules: \r\n- Only lot without .1/.2 ...\r\n- Separated by \" ; \", don't add spaces\r\nExample: 1234567;123456;";
+            label2.Text = "Enter lot(s) following the below rules: \r\n- Only lot without .1/.2 ...\r\n- Separated by \" ; \", don't add spaces\r\nExample: 1234567;123456;\r\nClick on format and then run.";
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(12, 203);
+            textBox1.Location = new Point(12, 214);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(465, 162);
@@ -91,7 +91,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            label3.Location = new Point(12, 394);
+            label3.Location = new Point(12, 405);
             label3.Name = "label3";
             label3.Size = new Size(119, 20);
             label3.TabIndex = 5;
@@ -101,7 +101,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(489, 420);
+            ClientSize = new Size(489, 434);
             Controls.Add(label3);
             Controls.Add(textBox1);
             Controls.Add(label2);
