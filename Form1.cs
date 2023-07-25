@@ -39,12 +39,17 @@ namespace VitroxProject
             //aqui va todo el proceso de icos
             List<string> PathListIcos = new()
             {
-                "\\\\MEX6ICOS01\\_results\\ascii\\global"
+                "\\\\MEX6ICOS01\\_results\\ascii\\global",
+                "\\\\MEX6ICOS02\\_results\\ascii\\global",
+                "\\\\MEX6ICOS03\\_results\\ascii\\global",
+                "\\\\mex6icos04\\_results\\ascii\\global",
+                "\\\\mex6icos05\\_results\\ascii\\global",
+                "\\\\mex6icos06\\_results\\ascii\\global"
             };
 
             List<string> VariantIcos = new()
             {
-                ".1",
+                ".1",".2",".1_R1",".1_R2",".1_R3"
             };
 
             string global = "_global";
@@ -169,5 +174,9 @@ namespace VitroxProject
             }
         }
 
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
