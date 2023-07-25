@@ -11,6 +11,68 @@ namespace VitroxProject
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //VitroxProcess();
+            IcosProcess();
+        }
+
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //Format the lots
+            while (textBox1.Text.Contains(".1\n"))
+            {
+                textBox1.Text = textBox1.Text.Replace(".1\n", ";");
+            }
+            while (textBox1.Text.Contains(".1\r\n"))
+            {
+                textBox1.Text = textBox1.Text.Replace(".1\r\n", ";");
+            }
+            textBox1.Text = textBox1.Text.Replace(".1", ";");
+
+        }
+
+        void IcosProcess()
+        {
+            List<string> lotsList = new List<string>();
+            List<string> lotsFound = new List<string>();
+
+            //aqui va todo el proceso de icos
+            List<string> PathListIcos = new()
+            {
+                "\\\\MEX6ICOS01\\_results\\ascii\\global"
+            };
+
+            List<string> VariantIcos = new()
+            {
+                ".1",
+            };
+
+            string global = "_global";
+            string ext = ".mhtml";
+
+            //Pass the lots to a list
+            while (textBox1.Text.Contains(";"))
+            {
+                string lot = textBox1.Text.Substring(0, textBox1.Text.IndexOf(";"));
+                textBox1.Text = textBox1.Text.Remove(0, textBox1.Text.IndexOf(";") + 1);
+                lotsList.Add(lot);
+            }
+
+
+            foreach(string lot in lotsList)
+            {
+                foreach(string path in PathListIcos)
+                {
+                    foreach(string variant in VariantIcos)
+                    {
+                        string p1 = path + lot + variant + "\\" + global + ext;
+                    }
+                }
+            }
+        }
+
+        private void VitroxProcess()
+        {
             short lotsNotFound = 0;
             string server2 = "\\\\mex6vtrx02\\D\\Texas\\Report\\ICPLUS", server1 = "\\\\mex6vtrx01\\d\\Texas\\Report\\ICPLUS";
             string mainPath = "\\\\mexhome03\\Data\\MC Back End\\Generic\\Molding and Singulation\\Emilia M\\VTRX REPORTS";
@@ -107,19 +169,5 @@ namespace VitroxProject
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            //Format the lots
-            while (textBox1.Text.Contains(".1\n"))
-            {
-                textBox1.Text = textBox1.Text.Replace(".1\n", ";");
-            }
-            while (textBox1.Text.Contains(".1\r\n"))
-            {
-                textBox1.Text = textBox1.Text.Replace(".1\r\n", ";");
-            }
-            textBox1.Text = textBox1.Text.Replace(".1", ";");
-
-        }
     }
 }
