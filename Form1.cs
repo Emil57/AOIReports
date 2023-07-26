@@ -44,7 +44,17 @@ namespace VitroxProject
                 "\\\\MEX6ICOS03\\_results\\ascii\\global",
                 "\\\\mex6icos04\\_results\\ascii\\global",
                 "\\\\mex6icos05\\_results\\ascii\\global",
-                "\\\\mex6icos06\\_results\\ascii\\global"
+                "\\\\mex6icos06\\_results\\ascii\\global",
+                "\\\\mex6icos07\\_results\\ascii\\global",
+                "\\\\mex6icos08\\_Results\\ascii\\global",
+                "\\\\mex6icos09\\_results\\ascii\\global",
+                "\\\\mex6icos10\\_results\\ascii\\global",
+                "\\\\mex6icos11\\_results\\ascii\\global",
+                "\\\\mex6icos12\\_results\\ascii\\global",
+                "\\\\mex6icos13\\_results\\ascii\\global",
+                "\\\\mex6icos14\\_results\\ascii\\global",
+                "\\\\mex6icos15\\_results\\ascii\\global",
+                "\\\\mex6icos16\\_results\\ascii\\global"
             };
 
             List<string> VariantIcos = new()
@@ -64,23 +74,28 @@ namespace VitroxProject
             }
 
 
-            foreach(string lot in lotsList)
+            foreach (string lot in lotsList)
             {
                 foreach(string path in PathListIcos)
                 {
                     foreach(string variant in VariantIcos)
                     {
-                        string p1 = path + lot + variant + "\\" + global + ext;
+                        string pathicos = path + lot + variant + "\\" + global + ext;
                     }
                 }
             }
         }
+        
+
+        // 1. arma los paths para cada caso path 1 
+        // 2. revisa con file.exist() si existe el path, si no existe es pq no esta en esa carpeta
+        // 3. cuando encuentres el archivo, muevelo a la carpeta que quieres con file.copy()
 
         private void VitroxProcess()
         {
             short lotsNotFound = 0;
             string server2 = "\\\\mex6vtrx02\\D\\Texas\\Report\\ICPLUS", server1 = "\\\\mex6vtrx01\\d\\Texas\\Report\\ICPLUS";
-            string mainPath = "\\\\mexhome03\\Data\\MC Back End\\Generic\\Molding and Singulation\\Emilia M\\VTRX REPORTS";
+            string mainPath = "\\\\mexhome03\\Data\\MC Back End\\Generic\\Molding and Singulation\\AOI REPORTS";
             bool flag = false;
             List<string> lotsList = new List<string>();
             List<string> lotsFound = new List<string>();
