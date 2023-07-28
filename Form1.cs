@@ -36,7 +36,7 @@ namespace VitroxProject
             List<string> lotsList = new List<string>();
             List<string> lotsFound = new List<string>();
 
-            //aqui va todo el proceso de icos
+            //paths de icos para buscar
             List<string> PathListIcos = new()
             {
                 "\\\\MEX6ICOS01\\_results\\ascii\\global",
@@ -57,13 +57,13 @@ namespace VitroxProject
                 "\\\\mex6icos16\\_results\\ascii\\global"
             };
 
+            //posibles variantes para archivos de lotes 
             List<string> VariantIcos = new()
             {
                 ".1",".2",".1_R1",".1_R2",".1_R3"
             };
 
-            string global = "_global";
-            string ext = ".mhtml";
+            string global = "_global", ext = ".mhtml";
 
             //Pass the lots to a list
             while (textBox1.Text.Contains(";"))
@@ -73,15 +73,55 @@ namespace VitroxProject
                 lotsList.Add(lot);
             }
 
-
+            Dictionary<string, string> FilesPathList = new(); // list of path files involved in the project
             foreach (string lot in lotsList)
             {
+                short indexListOfIcosPath = 1; // goes to icos number
                 foreach(string path in PathListIcos)
                 {
                     foreach(string variant in VariantIcos)
                     {
                         string pathicos = path + lot + variant + "\\" + global + ext;
+                        string pathFolderToStore = "";
+
+                        if (File.Exists(pathicos))
+                        {
+                            switch (indexListOfIcosPath)
+                            {
+                                case 0:
+                                    break;
+                                case 1:
+                                    break;
+                                case 2:
+                                    break;
+                                case 4:
+                                    break;
+                                case 5:
+                                    break;
+                                case 6:
+                                    break;
+                                case 7:
+                                    break;
+                                case 8:
+                                    break;
+                                case 9:
+                                    break;
+                                case 10:
+                                    break;
+                                case 11:
+                                    break;
+                                case 12:
+                                    break;
+                                case 13:
+                                    break;
+                                case 14:
+                                    break;
+                                case 15:
+                                    break;
+                            }
+                        }
                     }
+                    indexListOfIcosPath++;
                 }
             }
         }
