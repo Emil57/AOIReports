@@ -1,9 +1,15 @@
+using Microsoft.VisualBasic.Logging;
 using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VitroxProject
 {
     public partial class Form1 : Form
     {
+
+        string chainOfLots = "";
+        const string globalPath = "\\\\mexhome03\\Data\\MC Back End\\Generic\\Molding and Singulation\\AOI REPORTS";
+
         public Form1()
         {
             InitializeComponent();
@@ -11,33 +17,20 @@ namespace VitroxProject
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //VitroxProcess();
+            VitroxProcess();
             IcosProcess();
-        }
 
+            OpenDirectory(globalPath);
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //Format the lots
-            while (textBox1.Text.Contains(".1\n"))
-            {
-                textBox1.Text = textBox1.Text.Replace(".1\n", ";");
-            }
-            while (textBox1.Text.Contains(".1\r\n"))
-            {
-                textBox1.Text = textBox1.Text.Replace(".1\r\n", ";");
-            }
-            textBox1.Text = textBox1.Text.Replace(".1", ";");
-
+            FormatLots();
         }
 
-        void IcosProcess()
+        private void IcosProcess()
         {
-            List<string> lotsList = new List<string>();
-            List<string> lotsFound = new List<string>();
-
-            //paths de icos para buscar
-            List<string> PathListIcos = new()
+            List<string> IcosPathsList = new()
             {
                 "\\\\MEX6ICOS01\\_results\\ascii\\global",
                 "\\\\MEX6ICOS02\\_results\\ascii\\global",
@@ -56,182 +49,207 @@ namespace VitroxProject
                 "\\\\mex6icos15\\_results\\ascii\\global",
                 "\\\\mex6icos16\\_results\\ascii\\global"
             };
-
-            //posibles variantes para archivos de lotes 
-            List<string> VariantIcos = new()
+            List<string> IcosVariantsList = new()
             {
                 ".1",".2",".1_R1",".1_R2",".1_R3"
             };
 
-            string global = "_global", ext = ".mhtml";
+            string lotsWithoutFormat = textBox1.Text;
+            List<string> lotsFound = new List<string>();
 
-            //Pass the lots to a list
-            while (textBox1.Text.Contains(";"))
-            {
-                string lot = textBox1.Text.Substring(0, textBox1.Text.IndexOf(";"));
-                textBox1.Text = textBox1.Text.Remove(0, textBox1.Text.IndexOf(";") + 1);
-                lotsList.Add(lot);
-            }
-
-            Dictionary<string, string> FilesPathList = new(); // list of path files involved in the project
-            foreach (string lot in lotsList)
-            {
-                short indexListOfIcosPath = 1; // goes to icos number
-                foreach(string path in PathListIcos)
-                {
-                    foreach(string variant in VariantIcos)
-                    {
-                        string pathicos = path + lot + variant + "\\" + global + ext;
-                        string pathFolderToStore = "";
-
-                        if (File.Exists(pathicos))
-                        {
-                            switch (indexListOfIcosPath)
-                            {
-                                case 0:
-                                    break;
-                                case 1:
-                                    break;
-                                case 2:
-                                    break;
-                                case 4:
-                                    break;
-                                case 5:
-                                    break;
-                                case 6:
-                                    break;
-                                case 7:
-                                    break;
-                                case 8:
-                                    break;
-                                case 9:
-                                    break;
-                                case 10:
-                                    break;
-                                case 11:
-                                    break;
-                                case 12:
-                                    break;
-                                case 13:
-                                    break;
-                                case 14:
-                                    break;
-                                case 15:
-                                    break;
-                            }
-                        }
-                    }
-                    indexListOfIcosPath++;
-                }
-            }
+            //Step 1
+            List<string> ListOfLots = ConvertLotChainToList();
+            //Step 2
+            LookUpForLots(ListOfLots, IcosPathsList, IcosVariantsList, "Icos");
+            //------------------------------------------------------------------------------------
         }
-        
-
-        // 1. arma los paths para cada caso path 1 
-        // 2. revisa con file.exist() si existe el path, si no existe es pq no esta en esa carpeta
-        // 3. cuando encuentres el archivo, muevelo a la carpeta que quieres con file.copy()
-
+       
         private void VitroxProcess()
         {
-            short lotsNotFound = 0;
-            string server2 = "\\\\mex6vtrx02\\D\\Texas\\Report\\ICPLUS", server1 = "\\\\mex6vtrx01\\d\\Texas\\Report\\ICPLUS";
-            string mainPath = "\\\\mexhome03\\Data\\MC Back End\\Generic\\Molding and Singulation\\AOI REPORTS";
-            bool flag = false;
-            List<string> lotsList = new List<string>();
-            List<string> lotsFound = new List<string>();
-            string[] fileVariants =
+            List<string> VitroxPathsList = new()
             {
-                ".1", ".2",".1-1", ".1-2", ".1-3",
+                "\\\\mex6vtrx01\\d\\Texas\\Report\\ICPLUS",
+                "\\\\mex6vtrx02\\D\\Texas\\Report\\ICPLUS"
+            };
+            List<string> VitroxVariantsList = new()
+            {
+                ".1", ".2", ".1-1", ".1-2", ".1-3",
             };
 
-            //Create new folders to store the lots files
-            string folder1 = mainPath + "\\" + "Folder1_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
-            string folder2 = mainPath + "\\" + "Folder2_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
-            if (!Directory.Exists(folder1))
+            bool flag = false;
+            List<string> lotsFound = new List<string>();
+
+            //Step 1
+            List<string> ListOfLots = ConvertLotChainToList();
+            //Step 2
+            LookUpForLots(ListOfLots, VitroxPathsList, VitroxVariantsList, "Vitrox");
+        }
+        private void FormatLots()
+        {
+            //Format the lots from textbox
+            while (textBox1.Text.Contains(".1\n"))
             {
-                Directory.CreateDirectory(folder1);
+                textBox1.Text = textBox1.Text.Replace(".1\n", ";");
             }
-            if (!Directory.Exists(folder2))
+            while (textBox1.Text.Contains(".1\r\n"))
             {
-                Directory.CreateDirectory(folder2);
+                textBox1.Text  = textBox1.Text.Replace(".1\r\n", ";");
             }
+                textBox1.Text = textBox1.Text.Replace(".1", ";");
+            textBox1.Text = textBox1.Text;
+        }
+        private List<string> ConvertLotChainToList()
+        {
+            List<string> ListOfLots = new List<string>();
+            chainOfLots = textBox1.Text;
 
             //Pass the lots to a list
-            while (textBox1.Text.Contains(";"))
+            while (chainOfLots.Contains(";"))
             {
-                string lot = textBox1.Text.Substring(0, textBox1.Text.IndexOf(";"));
-                textBox1.Text = textBox1.Text.Remove(0, textBox1.Text.IndexOf(";") + 1);
-                lotsList.Add(lot);
+                string lot = chainOfLots.Substring(0, chainOfLots.IndexOf(";"));
+                chainOfLots = chainOfLots.Remove(0, chainOfLots.IndexOf(";") + 1);
+                ListOfLots.Add(lot);
             }
-
-            //search for the lots inside the drives
-            foreach (string lot in lotsList)
-            {
-                foreach (string variant in fileVariants)
-                {
-                    string lotPath1 = server1 + "\\" + lot + variant + ".txt";
-                    string lotPath2 = server2 + "\\" + lot + variant + ".txt";
-                    if (File.Exists(lotPath1))
-                    {
-                        string newPath = folder1 + "\\" + lot + variant + ".txt";
-                        if (File.Exists(newPath))
-                        {
-                            File.Delete(newPath);
-                        }
-                        File.Copy(lotPath1, newPath);
-                        if (!lotsFound.Contains(lot))
-                        {
-                            lotsFound.Add(lot);
-                        }
-                        flag = true;
-                    }
-                    else if (File.Exists(lotPath2))
-                    {
-                        string newPath = folder2 + "\\" + lot + variant + ".txt";
-                        if (File.Exists(newPath))
-                        {
-                            File.Delete(newPath);
-                        }
-
-                        File.Copy(lotPath2, newPath);
-                        if (!lotsFound.Contains(lot))
-                        {
-                            lotsFound.Add(lot);
-                        }
-                        flag = true;
-                    }
-                }
-                if (!flag)
-                {
-                    Debug.WriteLine("Lote: " + " no se encontro " + lot);
-                    lotsNotFound++;
-                }
-            }
-            if (lotsFound.Count > 0)
-            {
-                string message = "Following lots were found: \n";
-                foreach (string lot in lotsFound)
-                {
-                    message = message + lot + "  ";
-                }
-                MessageBox.Show(message, "Lots Results");
-
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = mainPath,
-                    UseShellExecute = true,
-                    Verb = "open"
-                });
-            }
-            else
-            {
-                MessageBox.Show("No lots found.", "Lots Results");
-            }
+            return ListOfLots;
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void LookUpForLots(List<string> ListOfLots, List<string> PathsList, List<string> VariantsList, string ReferenceOfData)
         {
+            Dictionary<string, string> ExtensionsList = new Dictionary<string, string>()
+            {
+                { "Vitrox",".txt" },
+                {"Icos",".mht" },
 
+            };
+            const string global = "_global";
+            string lotPath = "", folderToCreate = "", newLotPath = "";
+
+            foreach (string lot in ListOfLots)
+            {
+                foreach (string path in PathsList)
+                {
+                    foreach (string variant in VariantsList)
+                    {
+                        if (ReferenceOfData.Equals("Vitrox"))
+                        {
+                            //Vitrox changes that apply
+                            lotPath = path + "\\" + lot + variant + ExtensionsList[ReferenceOfData];
+                        }
+                        else if(ReferenceOfData.Equals("Icos"))
+                        {
+                            //Icos changes that apply
+                            lotPath = path + "\\" + lot + variant + global + ExtensionsList[ReferenceOfData];
+                        }
+
+                        if (File.Exists(lotPath))
+                        {
+                            folderToCreate = FindFolderForPath(PathsList, path, ReferenceOfData);
+                            if(folderToCreate != null) 
+                            {
+                                newLotPath = ConcatenateNewLotPath(folderToCreate, lot, ReferenceOfData, variant, global);
+                                if (File.Exists(newLotPath))
+                                {
+                                    File.Delete(newLotPath);
+                                }
+                                File.Copy(lotPath, newLotPath);
+                            }
+                            else
+                            {
+                                //Stop program
+                                throw new Exception();
+                            }
+                            
+                        }
+                    }
+                }
+            }
         }
+
+        private string FindFolderForPath(List<string> PathsList, string path, string ReferenceOfData)
+        {
+            string folderToCreate="";
+            switch (PathsList.IndexOf(path))
+            {
+                case 0:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "01_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 1:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "02_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 2:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "03_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 3:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "04_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 4:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "05_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 5:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "06_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 6:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "07_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 7:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "08_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 8:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "09_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 9:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "10_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 10:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "11_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 11:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "12_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 12:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "13_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 13:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "14_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 14:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "15_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+                case 15:
+                    folderToCreate = globalPath + "\\" + ReferenceOfData.ToUpper() + "16_" + DateTime.Now.ToShortDateString().ToString().Replace('/', '-');
+                    break;
+            }
+            if (!Directory.Exists(folderToCreate))
+            {
+                Directory.CreateDirectory(folderToCreate);
+            }
+
+            return folderToCreate;
+        }
+
+        private string ConcatenateNewLotPath(string folderToCreate, string lot, string ReferenceOfData, string variant, string global)
+        {
+            string lotPath = "";
+            if (ReferenceOfData.Equals("Vitrox"))
+            {
+                lotPath = folderToCreate + "\\" + lot + variant + ".txt";
+            }
+            else if (ReferenceOfData.Equals("Icos"))
+            {
+                lotPath = folderToCreate + "\\" + lot + variant + global + ".mht";
+            }
+            return lotPath;
+        }
+
+        private void OpenDirectory(string path)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = path,
+                UseShellExecute = true,
+                Verb = "open"
+            });
+        }
+
     }
 }
