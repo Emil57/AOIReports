@@ -40,7 +40,7 @@
             // button1
             // 
             button1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            button1.Location = new Point(358, 297);
+            button1.Location = new Point(358, 260);
             button1.Margin = new Padding(3, 2, 3, 2);
             button1.Name = "button1";
             button1.Size = new Size(59, 22);
@@ -52,7 +52,7 @@
             // button2
             // 
             button2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            button2.Location = new Point(267, 297);
+            button2.Location = new Point(267, 260);
             button2.Margin = new Padding(3, 2, 3, 2);
             button2.Name = "button2";
             button2.Size = new Size(73, 22);
@@ -65,11 +65,11 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(94, 27);
+            label1.Location = new Point(115, 28);
             label1.Name = "label1";
-            label1.Size = new Size(227, 45);
+            label1.Size = new Size(203, 45);
             label1.TabIndex = 2;
-            label1.Text = "Vitrox Project";
+            label1.Text = "AOI Reports";
             // 
             // label2
             // 
@@ -77,13 +77,13 @@
             label2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
             label2.Location = new Point(10, 83);
             label2.Name = "label2";
-            label2.Size = new Size(206, 75);
+            label2.Size = new Size(175, 30);
             label2.TabIndex = 3;
-            label2.Text = "Enter lot(s) following the below rules: \r\n- Only lot without .1/.2 ...\r\n- Separated by \" ; \", don't add spaces\r\nExample: 1234567;123456;\r\nClick on format and then run.";
+            label2.Text = "1. Enter lot(s)\r\n2. Click on format and then run.";
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(10, 161);
+            textBox1.Location = new Point(10, 124);
             textBox1.Margin = new Padding(3, 2, 3, 2);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
@@ -94,7 +94,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            label3.Location = new Point(10, 304);
+            label3.Location = new Point(10, 267);
             label3.Name = "label3";
             label3.Size = new Size(92, 15);
             label3.TabIndex = 5;
@@ -104,7 +104,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(428, 325);
+            ClientSize = new Size(428, 289);
             Controls.Add(label3);
             Controls.Add(textBox1);
             Controls.Add(label2);
@@ -114,7 +114,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
-            Text = "Vitrox Project";
+            Text = "AOI Report";
             ResumeLayout(false);
             PerformLayout();
         }

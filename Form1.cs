@@ -63,7 +63,7 @@ namespace VitroxProject
             LookUpForLots(ListOfLots, IcosPathsList, IcosVariantsList, "Icos");
             //------------------------------------------------------------------------------------
         }
-       
+
         private void VitroxProcess()
         {
             List<string> VitroxPathsList = new()
@@ -93,9 +93,9 @@ namespace VitroxProject
             }
             while (textBox1.Text.Contains(".1\r\n"))
             {
-                textBox1.Text  = textBox1.Text.Replace(".1\r\n", ";");
+                textBox1.Text = textBox1.Text.Replace(".1\r\n", ";");
             }
-                textBox1.Text = textBox1.Text.Replace(".1", ";");
+            textBox1.Text = textBox1.Text.Replace(".1", ";");
             textBox1.Text = textBox1.Text;
         }
         private List<string> ConvertLotChainToList()
@@ -135,7 +135,7 @@ namespace VitroxProject
                             //Vitrox changes that apply
                             lotPath = path + "\\" + lot + variant + ExtensionsList[ReferenceOfData];
                         }
-                        else if(ReferenceOfData.Equals("Icos"))
+                        else if (ReferenceOfData.Equals("Icos"))
                         {
                             //Icos changes that apply
                             lotPath = path + "\\" + lot + variant + global + ExtensionsList[ReferenceOfData];
@@ -144,7 +144,7 @@ namespace VitroxProject
                         if (File.Exists(lotPath))
                         {
                             folderToCreate = FindFolderForPath(PathsList, path, ReferenceOfData);
-                            if(folderToCreate != null) 
+                            if (folderToCreate != null)
                             {
                                 newLotPath = ConcatenateNewLotPath(folderToCreate, lot, ReferenceOfData, variant, global);
                                 if (File.Exists(newLotPath))
@@ -158,7 +158,7 @@ namespace VitroxProject
                                 //Stop program
                                 throw new Exception();
                             }
-                            
+
                         }
                     }
                 }
@@ -167,7 +167,7 @@ namespace VitroxProject
 
         private string FindFolderForPath(List<string> PathsList, string path, string ReferenceOfData)
         {
-            string folderToCreate="";
+            string folderToCreate = "";
             switch (PathsList.IndexOf(path))
             {
                 case 0:
