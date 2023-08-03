@@ -50,7 +50,7 @@ namespace VitroxProject
             };
             List<string> IcosVariantsList = new()
             {
-                ".1",".2",".1_R1",".1_R2",".1_R3"
+                ".1",".2",".3",".1_R1",".1_R2",".1_R3"
             };
 
             string lotsWithoutFormat = textBox1.Text;
