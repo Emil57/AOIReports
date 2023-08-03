@@ -6,7 +6,7 @@ namespace VitroxProject
 {
     public partial class Form1 : Form
     {
-
+        
         string chainOfLots = "";
         const string globalPath = "\\\\mexhome03\\Data\\MC Back End\\Generic\\Molding and Singulation\\AOI REPORTS";
 
@@ -19,7 +19,6 @@ namespace VitroxProject
         {
             VitroxProcess();
             IcosProcess();
-
             OpenDirectory(globalPath);
         }
 
@@ -55,7 +54,7 @@ namespace VitroxProject
             };
 
             string lotsWithoutFormat = textBox1.Text;
-            List<string> lotsFound = new List<string>();
+            List<string> lotsFound = new();
 
             //Step 1
             List<string> ListOfLots = ConvertLotChainToList();
@@ -76,7 +75,6 @@ namespace VitroxProject
                 ".1", ".2", ".1-1", ".1-2", ".1-3",
             };
 
-            bool flag = false;
             List<string> lotsFound = new List<string>();
 
             //Step 1
@@ -100,7 +98,7 @@ namespace VitroxProject
         }
         private List<string> ConvertLotChainToList()
         {
-            List<string> ListOfLots = new List<string>();
+            List<string> ListOfLots = new();
             chainOfLots = textBox1.Text;
 
             //Pass the lots to a list
@@ -108,21 +106,24 @@ namespace VitroxProject
             {
                 string lot = chainOfLots.Substring(0, chainOfLots.IndexOf(";"));
                 chainOfLots = chainOfLots.Remove(0, chainOfLots.IndexOf(";") + 1);
-                ListOfLots.Add(lot);
+                if (!ListOfLots.Contains(lot))
+                {
+                    ListOfLots.Add(lot);
+                }
             }
             return ListOfLots;
         }
 
-        private void LookUpForLots(List<string> ListOfLots, List<string> PathsList, List<string> VariantsList, string ReferenceOfData)
+        private static void LookUpForLots(List<string> ListOfLots, List<string> PathsList, List<string> VariantsList, string ReferenceOfData)
         {
-            Dictionary<string, string> ExtensionsList = new Dictionary<string, string>()
+            Dictionary<string, string> ExtensionsList = new()
             {
                 { "Vitrox",".txt" },
                 {"Icos",".mht" },
 
             };
             const string global = "_global";
-            string lotPath = "", folderToCreate = "", newLotPath = "";
+            string lotPath = "", newLotPath = "";
 
             foreach (string lot in ListOfLots)
             {
@@ -143,7 +144,7 @@ namespace VitroxProject
 
                         if (File.Exists(lotPath))
                         {
-                            folderToCreate = FindFolderForPath(PathsList, path, ReferenceOfData);
+                            string folderToCreate = FindFolderForPath(PathsList, path, ReferenceOfData);
                             if (folderToCreate != null)
                             {
                                 newLotPath = ConcatenateNewLotPath(folderToCreate, lot, ReferenceOfData, variant, global);
@@ -164,8 +165,7 @@ namespace VitroxProject
                 }
             }
         }
-
-        private string FindFolderForPath(List<string> PathsList, string path, string ReferenceOfData)
+        private static string FindFolderForPath(List<string> PathsList, string path, string ReferenceOfData)
         {
             string folderToCreate = "";
             switch (PathsList.IndexOf(path))
@@ -227,7 +227,7 @@ namespace VitroxProject
             return folderToCreate;
         }
 
-        private string ConcatenateNewLotPath(string folderToCreate, string lot, string ReferenceOfData, string variant, string global)
+        private static string ConcatenateNewLotPath(string folderToCreate, string lot, string ReferenceOfData, string variant, string global)
         {
             string lotPath = "";
             if (ReferenceOfData.Equals("Vitrox"))
@@ -241,7 +241,7 @@ namespace VitroxProject
             return lotPath;
         }
 
-        private void OpenDirectory(string path)
+        private static void OpenDirectory(string path)
         {
             Process.Start(new ProcessStartInfo
             {
